@@ -29,4 +29,4 @@ async def on_member_remove(member):
 
 
 
-pp.run('ODAxNTY4ODczMjE2MjEzMDAy.YAilLw.hdloPN5njaU2b5dHMsoJ17inwdY')
+pp.run('TOKEN')
