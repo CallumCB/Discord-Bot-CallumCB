@@ -1,6 +1,9 @@
 import random
 import discord
 from discord.ext import commands
+
+token=()
+
 intents = discord.Intents(messages = True, guilds = True, reactions = True, members = True, presences = True)
 pp = commands.Bot(command_prefix='.', intents = intents)
 
@@ -8,12 +11,11 @@ pp = commands.Bot(command_prefix='.', intents = intents)
 async def on_ready():
     print('Ready and at your service')
 @pp.event
-async def on_member_join(member):
-    print(f'{member}  has joined the server')
-@pp.event
 async def on_member_remove(member):
     print(f'{member}  has left the server')
-
+@pp.event
+async def on_member_join(member):
+    print(f'{member}  has joined the server')
 
 @pp.command()
 async def hi(ctx):
@@ -21,20 +23,23 @@ async def hi(ctx):
 @pp.command()
 async def ping(ctx):
     await ctx.send(f'{round(pp.latency * 1000)}ms')
-@pp.command()
-async def clear(ctx, amount=5):
-    await ctx.channel.purge(limit=amount+1)
-    await ctx.send(f'{amount} messages cleared')
 
-    
 @pp.command()
-async def kick(ctx, member : discord.Member, *, reason=None):
+async def clear(ctx, amount=1):
+    await ctx.channel.purge(limit=amount+1)
+    await ctx.send(f'{amount} messages cleared')  
+@pp.command()
+async def silent_clear(ctx, amount=1):
+    await ctx.channel.purge(limit=amount+1)
+
+@pp.command()
+async def kick(ctx, member : discord.Member, *, reason=None, user=None):
     await member.kick(reason=reason)
+    await ctx.send(f'{member.mention} was kicked because {reason}')
 @pp.command()
 async def ban(ctx, member : discord.Member, *, reason=None):
     await member.ban(reason=reason)
     await ctx.send(f'Banned: {member.mention}')
-"""After an hour I did have to copy this unban part"""
 @pp.command()
 async def unban(ctx, *, user=None):
     try:
