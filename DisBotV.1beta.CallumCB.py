@@ -1,8 +1,7 @@
 import random
 import discord
 from discord.ext import commands
-
-token=()
+TOKEN=''
 
 intents = discord.Intents(messages = True, guilds = True, reactions = True, members = True, presences = True)
 pp = commands.Bot(command_prefix='.', intents = intents)
@@ -27,10 +26,14 @@ async def ping(ctx):
 @pp.command()
 async def clear(ctx, amount=1):
     await ctx.channel.purge(limit=amount+1)
-    await ctx.send(f'{amount} messages cleared')  
+    await ctx.send(f'{amount} messages cleared')
 @pp.command()
 async def silent_clear(ctx, amount=1):
     await ctx.channel.purge(limit=amount+1)
+@pp.command()
+async def purge_channel(ctx, amount=1000):
+    await ctx.channel.purge(limit=amount+1)
+    await ctx.send('This channel has been purged and 1000 messages deleted.')
 
 @pp.command()
 async def kick(ctx, member : discord.Member, *, reason=None, user=None):
@@ -61,5 +64,25 @@ async def unban(ctx, *, user=None):
         await ctx.send("Unbanning failed")
         return
     await ctx.send(f"Unbanned {user.mention}!")
+#-------
 
-pp.run('token')
+@pp.event()
+async def on_message(self, message, member):
+        offensive_names = ['DERAGATORY NAMES HERE']
+
+    messageContent = message.content
+    if len(messageContent) > 0:
+        for word in offensive_names:
+            if word in messageContent:
+                await message.delete()
+                await message.channel.send('You can curse, but no name calling.')
+
+    messageContent = message.content
+    if len(messageContent) > 0:
+        for word in offensive_names:
+            if word in messageContent:
+                await
+
+#--------
+
+pp.run(TOKEN)
